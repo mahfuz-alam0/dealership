@@ -3,8 +3,7 @@ import Button from "../components/Button";
 import Field, { controlClass } from "../components/Field";
 import Logo from "../components/Logo";
 import Notice from "../components/Notice";
-import { getMe } from "../services/auth/getMe";
-import { login } from "../services/auth/login";
+import { getMe, login } from "../services/auth";
 import type { ApiError } from "../services/handleApiError";
 import type { User } from "../types";
 

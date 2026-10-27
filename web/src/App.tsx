@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMe } from "./services/auth/getMe";
+import { getMe } from "./services/auth";
 import { onUnauthorized, type ApiError } from "./services/handleApiError";
 import InventoryPage from "./pages/InventoryPage";
 import LoginPage from "./pages/LoginPage";

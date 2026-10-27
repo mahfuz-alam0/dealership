@@ -8,7 +8,7 @@ import StatTabs, { type Filter } from "../components/StatTabs";
 import Toolbar, { type View } from "../components/Toolbar";
 import VehicleCards from "../components/VehicleCards";
 import VehicleTable from "../components/VehicleTable";
-import { logout as apiLogout } from "../services/auth/logout";
+import { logout as apiLogout } from "../services/auth";
 import { listVehicles } from "../services/vehicles";
 import type { Sort, SortKey, User, Vehicle } from "../types";
 
