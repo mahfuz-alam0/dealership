@@ -18,8 +18,8 @@ export async function findVehicle(db: D1Database, id: number, dealershipId: numb
     .first<Vehicle>();
 }
 
-// One conditional UPDATE: version check + write are a single atomic statement, so two editors holding
-// the same version can't both win. No read-then-write. Resolves null when nothing matched.
+// DEFECTIVE DEMO (branch lost-update-bug, never deployed): read, compare in code, then write with no
+// version condition. Two editors holding the same version both pass the check, and the later write wins.
 export async function updateVehicle(
   db: D1Database,
   id: number,
@@ -29,12 +29,15 @@ export async function updateVehicle(
 ) {
   const { make, model, year, status } = edit;
 
+  const row = await findVehicle(db, id, dealershipId);
+  if (!row || row.version !== version) return null;
+
   return db
     .prepare(
       `UPDATE vehicles SET make = ?, model = ?, year = ?, status = ?, version = version + 1
-       WHERE id = ? AND dealership_id = ? AND version = ?
+       WHERE id = ? AND dealership_id = ?
        RETURNING ${COLUMNS}`,
     )
-    .bind(make, model, year, status, id, dealershipId, version)
+    .bind(make, model, year, status, id, dealershipId)
     .first<Vehicle>();
 }
