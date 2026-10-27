@@ -6,6 +6,7 @@ A small web app where two fictional car dealerships each manage their own vehicl
 |---|---|
 | Repository | https://github.com/mahfuz-alam0/dealership |
 | Live app | https://dealership-app.dealersip.workers.dev (health: `/api/health`) |
+| Green pipeline run | https://github.com/mahfuz-alam0/dealership/actions/runs/40571288435 (checks and deploy passed on `master`; from PR https://github.com/mahfuz-alam0/dealership/pull/1) |
 | Loom walkthrough | Not recorded yet |
 | Stack | Cloudflare Worker (Hono), Cloudflare D1 (SQLite), React, Vite, Tailwind |
 
