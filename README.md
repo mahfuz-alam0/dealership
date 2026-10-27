@@ -4,7 +4,7 @@ A small web app where two fictional car dealerships each manage their own vehicl
 
 | | |
 |---|---|
-| Repository | https://github.com/mahfuz-alam0/assesment |
+| Repository | https://github.com/mahfuz-alam0/dealership |
 | Live app | https://dealership-app.dealersip.workers.dev (health: `/api/health`) |
 | Loom walkthrough | Not recorded yet |
 | Stack | Cloudflare Worker (Hono), Cloudflare D1 (SQLite), React, Vite, Tailwind |
@@ -170,7 +170,7 @@ Schema changes go in a new file in `migrations/` (for example `0002_add_column.s
 
 ## Deployed smoke test
 
-Run on 2026-10-27 against the live URL: `APP_URL=https://dealership-app.dealersip.workers.dev npm run smoke`.
+Run on 2026-10-27 (re-run with S7 added) against the live URL: `APP_URL=https://dealership-app.dealersip.workers.dev npm run smoke`.
 
 ```
 ok  S1 health
@@ -180,9 +180,10 @@ ok  S4 viewer PUT rejected
 ok  S5 stale edit -> 409
 ok  S6 final read matches S3
 ok  restored original values
+ok  S7 cross-dealership GET and PUT -> 404, data unchanged
 ```
 
-The script edits one Alpha vehicle and puts the original values back at the end, so it can be run again. I also ran 24 extra direct API checks against the live URL with a throwaway script that is not in the repository: Alpha and Beta lists do not overlap, cross-dealership GET and PUT return 404 and leave the data unchanged, a spoofed dealership id is ignored, viewer PUT returns 403, bad input returns 400, two admins sending parallel edits from the same version get one 200 and one 409 with the winner's values stored, logout makes the old cookie return 401, and a garbage cookie returns 401. All 24 passed.
+The script edits one Alpha vehicle and puts the original values back at the end, so it can be run again. Step S7 covers cross-dealership GET and PUT (404, data unchanged). I also ran 24 extra direct API checks against the live URL with a throwaway script that is not in the repository: Alpha and Beta lists do not overlap, cross-dealership GET and PUT return 404 and leave the data unchanged, a spoofed dealership id is ignored, viewer PUT returns 403, bad input returns 400, two admins sending parallel edits from the same version get one 200 and one 409 with the winner's values stored, logout makes the old cookie return 401, and a garbage cookie returns 401. All 24 passed.
 
 ## A failed check blocks the deploy
 

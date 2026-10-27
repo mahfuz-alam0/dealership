@@ -84,3 +84,13 @@ const restored = await put(admin1, vehicle, {
 });
 eq(restored.status, 200, "restore status");
 step("restored original values");
+
+const betaAdmin = await login("admin1@beta.test");
+const [betaVehicle] = (await (await call("/api/vehicles", betaAdmin)).json()) as Vehicle[];
+const betaBody = { make: betaVehicle.make, model: betaVehicle.model, year: betaVehicle.year, status: betaVehicle.status };
+
+eq((await call(`/api/vehicles/${betaVehicle.id}`, admin1)).status, 404, "S7 cross-dealership GET");
+eq((await put(admin1, betaVehicle, { ...betaBody, make: "Hacked", version: betaVehicle.version })).status, 404, "S7 cross-dealership PUT");
+const betaAfter = (await (await call(`/api/vehicles/${betaVehicle.id}`, betaAdmin)).json()) as Vehicle;
+eq(betaAfter, betaVehicle, "S7 other dealership data unchanged");
+step("S7 cross-dealership GET and PUT -> 404, data unchanged");
