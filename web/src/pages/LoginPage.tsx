@@ -3,8 +3,9 @@ import Button from "../components/Button";
 import Field, { controlClass } from "../components/Field";
 import Logo from "../components/Logo";
 import Notice from "../components/Notice";
-import { getMe, login } from "../services/auth";
-import { ApiError } from "../services/http";
+import { getMe } from "../services/auth/getMe";
+import { login } from "../services/auth/login";
+import type { ApiError } from "../services/handleApiError";
 import type { User } from "../types";
 
 interface LoginPageProps {
@@ -29,9 +30,8 @@ export default function LoginPage({ notice, onLogin }: LoginPageProps) {
       await login(email, password);
       onLogin(await getMe());
     } catch (err) {
-      const message =
-        err instanceof ApiError && err.status === 401 ? "Invalid email or password." : (err as Error).message;
-      setError(message);
+      const apiError = err as ApiError;
+      setError(apiError.status === 401 ? "Invalid email or password." : apiError.message);
       setBusy(false);
     }
   }

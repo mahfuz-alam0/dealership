@@ -1,16 +1,32 @@
 import type { Vehicle } from "../types";
-import { request } from "./http";
+import { api } from "./api";
+import { handleApiError } from "./handleApiError";
 
 export type VehicleEdit = Pick<Vehicle, "make" | "model" | "year" | "status"> & { version: number };
 
-export function listVehicles() {
-  return request<Vehicle[]>("/api/vehicles");
+export async function listVehicles() {
+  try {
+    const { data } = await api.get<Vehicle[]>("/api/vehicles");
+    return data;
+  } catch (err) {
+    handleApiError(err);
+  }
 }
 
-export function getVehicle(id: number) {
-  return request<Vehicle>(`/api/vehicles/${id}`);
+export async function getVehicle(id: number) {
+  try {
+    const { data } = await api.get<Vehicle>(`/api/vehicles/${id}`);
+    return data;
+  } catch (err) {
+    handleApiError(err);
+  }
 }
 
-export function updateVehicle(id: number, edit: VehicleEdit) {
-  return request<Vehicle>(`/api/vehicles/${id}`, { method: "PUT", body: edit });
+export async function updateVehicle(id: number, edit: VehicleEdit) {
+  try {
+    const { data } = await api.put<Vehicle>(`/api/vehicles/${id}`, edit);
+    return data;
+  } catch (err) {
+    handleApiError(err);
+  }
 }

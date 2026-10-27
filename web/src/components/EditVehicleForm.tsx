@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { ApiError } from "../services/http";
+import type { ApiError } from "../services/handleApiError";
 import { getVehicle, updateVehicle, type VehicleEdit } from "../services/vehicles";
 import { STATUSES, type Vehicle } from "../types";
 import Button from "./Button";

@@ -143,7 +143,7 @@ The UI handles each state with a clear message: loading spinner, empty list, no 
 web/src/
   pages/        LoginPage, InventoryPage
   components/   table, cards, edit form, modal, toolbar, small UI pieces
-  services/     fetch wrapper, auth, vehicles
+  services/     api.ts, handleApiError.ts, auth/ (one file per call), vehicles.ts
 src/            Worker: routes, middleware, D1 queries, password hashing
 migrations/     D1 schema
 scripts/        seed, reset, smoke test
