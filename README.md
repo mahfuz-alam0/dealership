@@ -133,7 +133,7 @@ The third test in `e2e/inventory.spec.ts` automates this same sequence.
 
 ## Regression demo: defective variant vs the fix
 
-I checked that the race tests really catch a lost update by running them against a broken `updateVehicle` on my machine, on 2026-10-27. The broken version is never committed or deployed. It reads the row first, compares the version in code, then writes with no version condition:
+I checked that the race tests really catch a lost update by running them against a broken `updateVehicle` on my machine, on 2026-10-27. The broken version lives only on the branch [`lost-update-bug`](https://github.com/mahfuz-alam0/dealership/tree/lost-update-bug) ([diff against `master`](https://github.com/mahfuz-alam0/dealership/compare/master...lost-update-bug)), which is never merged or deployed: the deploy workflow runs only on `master`. It reads the row first, compares the version in code, then writes with no version condition:
 
 ```ts
 const row = await findVehicle(db, id, dealershipId);   // 1. read
@@ -151,7 +151,7 @@ Two admins send edits from version 1 at the same time. Both reads happen before 
 
 The fix is the single conditional `UPDATE ... WHERE id = ? AND dealership_id = ? AND version = ?` in `src/db/vehicles.ts`. SQLite runs one statement as a unit, so the version check and the write cannot be split by another request. The loser matches zero rows and gets 409.
 
-To reproduce: in `src/db/vehicles.ts`, replace `updateVehicle` with the three steps above, run `npm test`, then `git checkout src/db/vehicles.ts`.
+To reproduce: run `git checkout lost-update-bug && npm test` to see the 2 failures, or on `master` replace `updateVehicle` with the three steps above, run `npm test`, then `git checkout src/db/vehicles.ts`.
 
 ## Deploy to Cloudflare
 
